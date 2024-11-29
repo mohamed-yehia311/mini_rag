@@ -1,8 +1,8 @@
-from .BaseControler import BaseControler
+from .BaseController import BaseController
 import os
 import re
 
-class ProjectControler(BaseControler):
+class ProjectController(BaseController):
     def __init__(self):
         super().__init__()
 

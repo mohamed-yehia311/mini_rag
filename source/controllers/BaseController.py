@@ -2,7 +2,7 @@ from helpers.config import get_setting, Settings
 import os
 import random
 import string
-class BaseControler:
+class BaseController:
     def __init__(self):
         self.settings = get_setting()
         self.base_dir = os.path.dirname(os.path.dirname(__file__))

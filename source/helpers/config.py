@@ -7,6 +7,10 @@ class Settings(BaseSettings):
     FILE_ALLOWED_TYPES: list[str]
     FILE_MAX_SIZE: int
     FILE_DEFAULT_CHUNK_SIZE: int
+
+    MONGODB_URL: str
+    MONGODB_DATABASE: str
+    
     class Config:
         env_file = "C:\project\mini_rag-1\source\.env"
 

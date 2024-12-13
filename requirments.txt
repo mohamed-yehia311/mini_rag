@@ -4,3 +4,8 @@ python-mutlipart==0.0.17
 python-dotenv==1.0.1
 pydantic-settings==2.6.1
 aiofiles==24.1.0
+langChain==0.3.8
+langchain-community==0.3.8
+bson==0.5.10
+motor==3.6.0
+pydantic-mongo==2.3.0

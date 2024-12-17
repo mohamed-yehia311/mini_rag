@@ -1,2 +1,3 @@
+from .DataChunk import DataChunk
+from .Assets import Assets
 from .Project import Project
-from .DataChunck import DataChunck

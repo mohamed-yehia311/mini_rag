@@ -1,6 +1,6 @@
 from fastapi import FastAPI, APIRouter, Depends, UploadFile, status, Request
 from fastapi.responses import JSONResponse
-from helpers.config import get_setting, Settings
+from helpers.config import get_settings , Settings
 from controllers import DataController, ProjectController, ProcessController
 import os
 import aiofiles
@@ -13,7 +13,6 @@ from models.AssetsModel import AssetModel
 from models.db_schemes import DataChunk, Assets
 from models.enums.AssetTypeEnum import AssetTypeEnum
 from bson.objectid import ObjectId
-
 logger = logging.getLogger('uvicorn.error')
 
 dataRouter = APIRouter(
@@ -23,7 +22,7 @@ dataRouter = APIRouter(
 
 @dataRouter.post("/upload/{project_id}")
 async def upload_data(request: Request, project_id: str, file: UploadFile,
-                      app_settings: Settings = Depends(get_setting)):
+                      app_settings: Settings = Depends(get_settings)):
         
     
     project_model = await ProjectModel.create_instance(

@@ -1,2 +1,2 @@
-from CoherProvider import coherProvider
-from source.stores.providers.OpenAiProvider import OpenAiProvider
+from .CoherProvider import CoherProvider
+from .OpenAiProvider import OpenAiProvider

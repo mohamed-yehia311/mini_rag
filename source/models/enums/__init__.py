@@ -1,2 +1,2 @@
-from LLMEnum import LLMEnums, OpenAIEnums, CoHereEnums, DocumentTypeEnum
-from VectorDBEnums import DistanceMethodEnums
+from .LLMEnum import LLMEnums, OpenAIEnums, CoHereEnums, DocumentTypeEnum
+from .VectorDBEnums import DistanceMethodEnums, VectorDBEnums

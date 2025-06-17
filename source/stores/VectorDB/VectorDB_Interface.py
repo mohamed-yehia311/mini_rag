@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-
+from models.db_schemes import RetrievedDocument
 
 class VectorDBB_Interface(ABC):
     
@@ -21,11 +21,11 @@ class VectorDBB_Interface(ABC):
         pass
     
     @abstractmethod
-    def get_collcection_info(self, collection_name: str) -> dict:
+    def get_collection_info(self, collection_name: str) -> dict:
         pass
     
     @abstractmethod
-    def delect_collection(self, collection_name: str,
+    def delete_collection(self, collection_name: str,
                                 embedding_size: int,
                                 do_reset: bool = False):
         pass
@@ -45,5 +45,5 @@ class VectorDBB_Interface(ABC):
         pass
 
     @abstractmethod
-    def search_by_vector(self, collection_name: str, vector: list, limit: int):
+    def search_by_vector(self, collection_name: str, vector: list, limit: int) -> List[RetrievedDocument]:
         pass         

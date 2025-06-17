@@ -3,12 +3,12 @@ from models.db_schemes import DataChunk
 from .enums.DBEnum import DBEnum
 from bson.objectid import ObjectId
 from pymongo import InsertOne
-
+from bson import SON
 class ChunkModel(BaseDataModel):
 
     def __init__(self, db_client: object):
         super().__init__(db_client=db_client)
-        self.collection = self.db_client[DBEnum.COLECTION_CHUNK_NAME.value]
+        self.collection = self.db_client[DBEnum.COLLECTION_CHUNK_NAME.value]
         
     @classmethod
     async def create_instance(cls, db_client: object):
@@ -18,8 +18,8 @@ class ChunkModel(BaseDataModel):
 
     async def init_collection(self):
         all_collections = await self.db_client.list_collection_names()
-        if DBEnum.COLLECTION_ASSET_NAME.value not in all_collections:
-            self.collection = self.db_client[DBEnum.COLLECTION_ASSET_NAME.value]
+        if DBEnum.COLLECTION_CHUNK_NAME.value not in all_collections:
+            self.collection = self.db_client[DBEnum.COLLECTION_CHUNK_NAME.value]
             indexes = DataChunk.get_indexes()
             for index in indexes:
                 await self.collection.create_index(
@@ -64,6 +64,17 @@ class ChunkModel(BaseDataModel):
         })
 
         return result.deleted_count
+    
+    async def get_porject_chunks(self, project_id: ObjectId, page_no: int=1, page_size: int=50):
+        records = await self.collection.find({
+                    "chunk_project_id": project_id
+                }).skip(
+                    (page_no-1) * page_size
+                ).limit(page_size).to_list(length=None)
+        return [
+            DataChunk(**record)
+            for record in records
+        ]
     
     
 

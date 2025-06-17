@@ -1,11 +1,12 @@
 from ..LLM_Interface import LLM_interface
-from ...models.enums import OpenAIEnums
+from models.enums import OpenAIEnums
 from openai import OpenAI
 import logging
-
+import requests
+from huggingface_hub import InferenceClient
 
 class OpenAiProvider(LLM_interface):
-    def __ini__(self, api_key: str, api_url: str=None,
+    def __init__(self, api_key: str, api_url: str=None,
                        default_input_max_characters: int=1000,
                        default_generation_max_output_tokens: int=1000,
                        default_generation_temperature: float=0.1):
@@ -24,9 +25,10 @@ class OpenAiProvider(LLM_interface):
 
         self.client = OpenAI(
             api_key = self.api_key,
-            api_url = self.api_url
+            base_url = self.api_url if self.api_url and len(self.api_url) else None
         )
 
+        self.enums = OpenAIEnums
         self.logger = logging.getLogger(__name__)
         
     def set_generating_model(self, model_id):
@@ -59,7 +61,7 @@ class OpenAiProvider(LLM_interface):
         temperature = temperature if temperature else self.default_generation_temperature
         
         chat_history.append(
-            self.construct_prompt(prompt=prompt)
+            self.construct_prompt(prompt=prompt, role= OpenAIEnums.USER.value)
         )       
         
         response = self.client.chat.completions.create(
@@ -74,25 +76,40 @@ class OpenAiProvider(LLM_interface):
             return None
             
         return response.choices[0].message
-    
-    def generate_embedding(self, text, document_type = None):
-        
-        if not self.client:
-            self.logger.error("Opne ai client wasn't set") 
-            return None
-        
-        if not self.embedding_model_id:
-            self.logger.error("embbedding model id wasn't set") 
-            return None
 
-        response = self.client.embeddings.create(
-            model = self.embedding_model_id,
-            input = text,
+   
+    def generate_embedding(self, text, document_type=None):
+
+        client = InferenceClient(
+        provider="hf-inference",
+        api_key=self.api_key,
         )
-        
-        if not response or not response.data or len(response.data) == 0 or not response.data[0].embedding:
-            self.logger.error("Error while generating Embedding with OpenAi")
-            return None
-            
-        return response.data[0].embedding
 
+        result = client.feature_extraction(
+            text,
+            model=self.embedding_model_id,
+        )
+
+        return result.tolist()
+
+
+    # def generate_embedding(self, text, document_type = None):
+        
+    #     if not self.client:
+    #         self.logger.error("Opne ai client wasn't set") 
+    #         return None
+        
+    #     if not self.embedding_model_id:
+    #         self.logger.error("embbedding model id wasn't set") 
+    #         return None
+
+    #     response = self.client.embeddings.create(
+    #         model = self.embedding_model_id,
+    #         input = text,
+    #     )
+        
+    #     if not response or not response.data or len(response.data) == 0 or not response.data[0].embedding:
+    #         self.logger.error("Error while generating Embedding with OpenAi")
+    #         return None
+            
+    #     return response.data[0].embedding

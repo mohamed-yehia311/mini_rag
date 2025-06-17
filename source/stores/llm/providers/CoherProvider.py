@@ -1,5 +1,5 @@
 import cohere
-from ...models.enums import CoHereEnums
+from models.enums import CoHereEnums
 from ..LLM_Interface import LLM_interface
 import logging
 
@@ -18,7 +18,9 @@ class CoherProvider(LLM_interface):
             self.default_generation_temperature = default_generation_temperature
 
             self.generation_model_id = None
-
+            
+            self.enums = CoHereEnums   
+            
             self.embedding_model_id = None
             self.embedding_size = None
 

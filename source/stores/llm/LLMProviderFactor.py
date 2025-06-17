@@ -1,6 +1,7 @@
 
-from ..models.enums import LLMEnums
-from .providers import OpenAiProvider, CoherProvider
+from models.enums import LLMEnums
+from .providers.OpenAiProvider import OpenAiProvider
+from .providers.CoherProvider  import CoherProvider
 
 class LLMProviderFactory:
     def __init__(self, config: dict):
